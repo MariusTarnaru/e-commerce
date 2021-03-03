@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from 'src/app/common/product';
 import { ActivatedRoute } from '@angular/router';
+import {CartItem} from '../../common/cart-item';
+import {CartService} from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -21,7 +23,8 @@ export class ProductListComponent implements OnInit {
   theTotalElements: number = 0;
 
   constructor(private productService: ProductService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private cartService: CartService ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(() => {
@@ -29,7 +32,7 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  listProducts() {
+  listProducts(): void {
 
     this.searchMode = this.route.snapshot.paramMap.has('keyword');
 
@@ -42,7 +45,7 @@ export class ProductListComponent implements OnInit {
 
   }
 
-  handleSearchProducts() {
+  handleSearchProducts(): void {
 
     const theKeyword: string = this.route.snapshot.paramMap.get('keyword');
 
@@ -54,7 +57,7 @@ export class ProductListComponent implements OnInit {
     );
   }
 
-  handleListProducts() {
+  handleListProducts(): void {
 
     // check if "id" parameter is available
     const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
@@ -99,10 +102,21 @@ export class ProductListComponent implements OnInit {
     };
   }
 
-  updatePageSize(pageSize: number) {
+  updatePageSize(pageSize: number): void {
     this.thePageSize = pageSize;
     this.thePageNumber = 1;
     this.listProducts();
+
+  }
+
+  addToCart(theProduct: Product): void{
+
+    console.log(`Adding to cart: ${theProduct.name}, ${theProduct.unitPrice}`);
+
+    // TODO ... do the real work
+    const theCartItem = new CartItem(theProduct);
+
+    this.cartService.addToCart(theCartItem);
 
   }
 }
