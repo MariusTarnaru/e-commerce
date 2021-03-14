@@ -13,20 +13,20 @@ import {CartService} from '../../services/cart.service';
 export class ProductListComponent implements OnInit {
 
   products: Product[] = [];
-  currentCategoryId: number = 1;
-  previousCategoryId: number = 1;
+  currentCategoryId = 1;
+  previousCategoryId = 1;
   searchMode: boolean = false;
 
   // new properties for pagination
   thePageNumber: number = 1;
-  thePageSize: number = 5;
+  thePageSize: number = 10;
   theTotalElements: number = 0;
 
   constructor(private productService: ProductService,
               private route: ActivatedRoute,
               private cartService: CartService ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.paramMap.subscribe(() => {
       this.listProducts();
     });
